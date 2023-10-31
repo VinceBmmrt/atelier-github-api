@@ -11,6 +11,7 @@ import reposData from '../../data/repos';
 import './App.scss';
 
 function App() {
+  const nbPerPage = 12;
   const [repos, setRepos] = useState(reposData.items);
   const [totalCount, setTotalCount] = useState(reposData.total_count);
   const [pageNumber, setPageNumber] = useState(1);
@@ -35,7 +36,7 @@ function App() {
             sort: 'stars',
             order: 'desc',
             page: pageNumber,
-            per_page: 9,
+            per_page: nbPerPage,
           },
         })
         .then((response) => {
@@ -52,6 +53,8 @@ function App() {
     }
   }, [searchText, pageNumber]);
 
+  const lastPage = Math.ceil(totalCount / nbPerPage);
+
   return (
     <div className="app">
       <header className="app__header">
@@ -63,7 +66,7 @@ function App() {
 
       <Segment textAlign="center">
         <Button onClick={() => setPageNumber(pageNumber + 1)}>
-          Charger plus (page {pageNumber})
+          Charger plus (page {pageNumber} / {lastPage})
         </Button>
       </Segment>
     </div>
