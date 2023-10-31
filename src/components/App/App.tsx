@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Image } from 'semantic-ui-react';
+import { useEffect, useState } from 'react';
+import { Button, Image, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import Message from '../Message/Message';
 import ReposResults from '../ReposResults/ReposResults';
@@ -13,20 +13,28 @@ import './App.scss';
 function App() {
   const [repos, setRepos] = useState(reposData.items);
   const [totalCount, setTotalCount] = useState(reposData.total_count);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [searchText, setSearchText] = useState('');
 
   const handleSubmitSearchForm = (textToSearch: string) => {
+    // A la soumission du formulaire, je met à jour la valeur de searchText
+    setSearchText(textToSearch);
+    setPageNumber(1);
+  };
+
+  useEffect(() => {
     // Je lance la recherche seulement si j'ai un text à rechercher
-    if (textToSearch !== '') {
+    if (searchText !== '') {
       // Je vais faire une requête à l'API
       // Axios me permet de passer un deuxième paramètre à ma requête
       // Ce paramètre me permet de passé les paramêtre d'url (query params) de ma requête
       axios
         .get(`https://api.github.com/search/repositories`, {
           params: {
-            q: textToSearch,
+            q: searchText,
             sort: 'stars',
             order: 'desc',
-            page: 1,
+            page: pageNumber,
             per_page: 9,
           },
         })
@@ -42,7 +50,7 @@ function App() {
       setRepos([]);
       setTotalCount(0);
     }
-  };
+  }, [searchText, pageNumber]);
 
   return (
     <div className="app">
@@ -52,6 +60,12 @@ function App() {
       <SearchBar onSubmitSearchForm={handleSubmitSearchForm} />
       <Message message={`La recherche a donnée ${totalCount} résultat(s)`} />
       <ReposResults repos={repos} />
+
+      <Segment textAlign="center">
+        <Button onClick={() => setPageNumber(pageNumber + 1)}>
+          Charger plus (page {pageNumber})
+        </Button>
+      </Segment>
     </div>
   );
 }
