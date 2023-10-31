@@ -43,8 +43,17 @@ function App() {
           // On utilise axios pour faire une requête à l'API
           // Les données retourner par l'API sont dans response.data (pas besoin de faire un response.json())
           // Je modifie les données stocker dans mes states avec ceux provenant de l'API
-          setRepos(response.data.items);
-          setTotalCount(response.data.total_count);
+          if (pageNumber === 1) {
+            setRepos(response.data.items);
+            setTotalCount(response.data.total_count);
+          } else {
+            // Lorsque l'on doit modifier les données de state en utilisant les données précédentes
+            // On utilisera la syntaxe avec fonction de callback
+            // On récupérera en paramètre l'ancienne valeur de state
+            // Il faudra retourner la nouvelle valeur de state
+            // Ici on concatène les anciennes données avec les nouvelles données (celle de la page courante)
+            setRepos((oldRepos) => [...oldRepos, ...response.data.items]);
+          }
         });
     } else {
       // Sinon je met à jour mes states avec des valeurs vide
@@ -64,11 +73,14 @@ function App() {
       <Message message={`La recherche a donnée ${totalCount} résultat(s)`} />
       <ReposResults repos={repos} />
 
-      <Segment textAlign="center">
-        <Button onClick={() => setPageNumber(pageNumber + 1)}>
-          Charger plus (page {pageNumber} / {lastPage})
-        </Button>
-      </Segment>
+      {/* J'affiche le bouton charger plus si la dernière page est plus grande que la page courante */}
+      {lastPage > pageNumber && (
+        <Segment textAlign="center">
+          <Button onClick={() => setPageNumber(pageNumber + 1)}>
+            Charger plus (page {pageNumber} / {lastPage})
+          </Button>
+        </Segment>
+      )}
     </div>
   );
 }
