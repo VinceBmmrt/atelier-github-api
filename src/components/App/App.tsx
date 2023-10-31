@@ -4,6 +4,8 @@ import ReposResults from '../ReposResults/ReposResults';
 import logoGithub from '../../assets/images/logo-github.png';
 import SearchBar from '../SearchBar/SearchBar';
 
+import reposData from '../../data/repos';
+
 import './App.scss';
 
 function App() {
@@ -14,7 +16,7 @@ function App() {
       </header>
       <SearchBar />
       <Message message="La recherche a donnée 1159901 résultats" />
-      <ReposResults />
+      <ReposResults repos={reposData.items} />
     </div>
   );
 }
