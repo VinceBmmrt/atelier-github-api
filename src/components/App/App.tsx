@@ -13,12 +13,17 @@ function App() {
   const [repos, setRepos] = useState(reposData.items);
   const [totalCount, setTotalCount] = useState(reposData.total_count);
 
+  const handleSubmitSearchForm = (textToSearch: string) => {
+    console.log('Mon formulaire est soumis, je suis dans App', textToSearch);
+    // Je vais faire une requête à l'API
+  };
+
   return (
     <div className="app">
       <header className="app__header">
         <Image src={logoGithub} alt="logo github" centered size="small" />
       </header>
-      <SearchBar />
+      <SearchBar onSubmitSearchForm={handleSubmitSearchForm} />
       <Message message={`La recherche a donnée ${totalCount} résultat(s)`} />
       <ReposResults repos={repos} />
     </div>
