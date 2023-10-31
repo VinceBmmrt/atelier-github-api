@@ -7,7 +7,7 @@ import './App.scss';
 function App() {
   return (
     <div className="app">
-      <header>Mon image</header>
+      <header className="app__header">Mon image</header>
       <SearchBar />
       <Message />
       <ReposResults />
