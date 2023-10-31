@@ -13,7 +13,7 @@ function App() {
         <Image src={logoGithub} alt="logo github" centered size="small" />
       </header>
       <SearchBar />
-      <Message />
+      <Message message="La recherche a donnée 1159901 résultats" />
       <ReposResults />
     </div>
   );
